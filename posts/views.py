@@ -14,7 +14,8 @@ def index(request):
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, "index.html", {'page': page, })
+    return render(request, "index.html", {
+        'page': page, "paginator": paginator, })
 
 
 def group_posts(request, slug):
@@ -23,7 +24,8 @@ def group_posts(request, slug):
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, "group.html", {"group": group, "page": page, })
+    return render(request, "group.html", {
+        "group": group, "page": page, "paginator": paginator, })
 
 
 class NewPost(LoginRequiredMixin, CreateView):
@@ -46,7 +48,8 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     return render(request, "profile.html",
                   {"user_profile": user_profile,
-                   "page": page, "post_list": post_list})
+                   "page": page, "post_list": post_list,
+                   "paginator": paginator})
 
 
 def post_view(request, username, post_id):
@@ -63,15 +66,16 @@ def post_view(request, username, post_id):
 @login_required
 def post_edit(request, username, post_id):
     user_profile = get_object_or_404(User, username=username)
+    if request.user.username != user_profile.username:
+        return redirect('post', username, post_id)
     post_list = user_profile.posts.all()
     post = post_list.get(id=post_id)
     form = PostForm(instance=post)
-    if request.method == 'POST' and (request.user.username ==
-                                     user_profile.username):
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            form.save()
+    if request.user.username == user_profile.username:
+        if request.method == 'POST':
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                form.save()
+                return redirect('post', username, post_id)
         return render(request, "new_post.html",
-                      {"user_profile": user_profile, "form": form, })
-    else:
-        return redirect('post', username, post_id)
+                  {"user_profile": user_profile, "form": form, })

@@ -86,7 +86,7 @@ class PostsURLTests(TestCase):
             '/testname2/': 200,
             '/testname/1/': 200,
             '/testname2/2/': 200,
-            '/testname/1/edit/': 302,
+            '/testname/1/edit/': 200,
             '/testname2/2/edit/': 302,
         }
         for template, status_code in templates_response.items():
