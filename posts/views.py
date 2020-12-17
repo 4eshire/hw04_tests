@@ -78,4 +78,5 @@ def post_edit(request, username, post_id):
                 form.save()
                 return redirect('post', username, post_id)
         return render(request, "new_post.html",
-                  {"user_profile": user_profile, "form": form, })
+                      {"user_profile": user_profile, "form": form,
+                       'post': post})
