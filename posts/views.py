@@ -80,3 +80,16 @@ def post_edit(request, username, post_id):
         return render(request, "new_post.html",
                       {"user_profile": user_profile, "form": form,
                        'post': post})
+
+
+def page_not_found(request, exception=None):
+    return render(
+        request,
+        "misc/404.html",
+        {"path": request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500)

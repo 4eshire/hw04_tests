@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
+from django.test import Client, TestCase, SimpleTestCase, override_settings
 from django.urls import reverse
 
 from posts.models import Group, Post
+from posts.views import page_not_found
 
 
 class PostsPagesTests(TestCase):
@@ -135,3 +136,8 @@ class PostsPagesTests(TestCase):
         for expected in form_fields:
             with self.subTest():
                 self.assertIn(expected, response.context)
+
+    def test_handler_renders_template_response(self):
+        response = self.guest_client.get('404/')
+        self.assertTemplateUsed(response, 'misc/404.html')
+        self.assertEqual(response.status_code, 404)
