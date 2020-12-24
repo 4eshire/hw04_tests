@@ -1,5 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Новая запись{% endblock %}
+
+{% block title %}
+    {% if user.get_username == author.get_username and post %}
+        Редактирование записи
+    {% else %}
+        Новая запись
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 {% load user_filters %}
 
@@ -7,15 +15,15 @@
     <div class="col-md-8 p-5">
         <div class="card">
             <div class="card-header">
-                {% if user.get_username == user_profile.get_username and form.text %}
-                    Редактировать запись
+                {% if user.get_username == author.get_username and post %}
+                    Редактирование записи
                 {% else %}
                     Новая запись
                 {% endif %}
             </div>
             <div class="card-body">
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% for field in form %}
@@ -42,10 +50,10 @@
 
                     <div class="col-md-6 offset-md-4">
                         <button type="submit" class="btn btn-primary">
-                            {% if user.get_username == user_profile.get_username and form.text %}
-                                Редактировать запись
+                            {% if user.get_username == author.get_username and form.text %}
+                                Сохранить
                             {% else %}
-                                Добавить запись
+                                Добавить
                             {% endif %}
                         </button>
                     </div>

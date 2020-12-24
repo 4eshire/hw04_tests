@@ -29,6 +29,7 @@ class Post(models.Model):
                               related_name="posts", blank=True, null=True,
                               verbose_name="группа поста",
                               help_text="выберите группу из списка")
+    #image = models.ImageField(upload_to='posts/', blank=True, null=True)
 
     class Meta:
         verbose_name = "Пост"

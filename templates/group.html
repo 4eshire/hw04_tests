@@ -8,13 +8,20 @@
     <p> {{ group.description }} </p>
 
     {% for post in page %}
-        <p>Цитаты {{ post.author.get_full_name }}</p>
+        <p>Цитата  {{ post.author.username }}</p>
         <h3>
-            {% if post.author.get_full_name %}
-                Автор: {{ post.author.get_full_name }},
+            Автор: <a href="{% url 'profile' username=post.author.username %}"><strong class="d-block text-gray-dark"> @{{ post.author.username }} </strong></a>
+            {% if post.author.username %}
+                {{ post.author.username }} ,
             {% endif %}
             Дата публикации: {{ post.pub_date|date:"d M Y" }}
         </h3>
+        <div class="card mb-3 mt-1 shadow-sm">
+            {% load thumbnail %}
+                {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+                <img class="card-img" src="{{ im.url }}">
+            {% endthumbnail %}
+        </div>
         <p>{{ post.text|linebreaksbr }}</p>
         {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}

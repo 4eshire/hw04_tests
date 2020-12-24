@@ -16,12 +16,12 @@ class GroupModelTest(TestCase):
         cls.group = Group.objects.get(slug='test-group')
 
     def test_str(self):
-        group = GroupModelTest.group
+        group = self.group
         expected_str = group.title
         self.assertEquals(expected_str, str(group))
 
     def test_verbose_name(self):
-        group = GroupModelTest.group
+        group = self.group
         field_verboses = {
             'title': 'название группы',
             'description': 'описание группы',
@@ -50,13 +50,13 @@ class PostModelTest(TestCase):
         cls.post = Post.objects.get()
 
     def test_str(self):
-        post = PostModelTest.post
+        post = self.post
         expected_str = \
             f"{post.text[:15], post.pub_date, post.author, post.group}"
         self.assertEquals(expected_str, str(post))
 
     def test_verbose_name(self):
-        post = PostModelTest.post
+        post = self.post
         field_verboses = {
             'text': 'ваш пост',
             'pub_date': 'дата публикации',
@@ -69,7 +69,7 @@ class PostModelTest(TestCase):
                     post._meta.get_field(value).verbose_name, expected)
 
     def test_help_text(self):
-        post = PostModelTest.post
+        post = self.post
         field_help_texts = {
             'text': 'напишите свой пост здесь',
             'author': 'информация об авторе данного поста',
